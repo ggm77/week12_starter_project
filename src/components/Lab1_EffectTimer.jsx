@@ -8,7 +8,16 @@ export default function Lab1EffectTimer() {
   useEffect(() => {
     // TODO 1: 1초마다 setCount(prev => prev + 1)을 실행할 setInterval 작성
     // TODO 2: 만든 타이머 ID를 보관
+    console.log("[LAB 1] effect: 타이머 시작");
+    const id = setInterval(() => {
+      setCount(count => count + 1);
+    }, 1000);
+    
     // TODO 3: return Cleanup 함수에서 clearInterval 호출
+    return () => {
+      console.log("[LAB 1] cleanup: 타이머 끝");
+      clearInterval(id);
+    };
     // TODO 4: Dependency Array가 []일 때와 생략했을 때의 차이 관찰
   }, []);
 
