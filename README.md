@@ -29,6 +29,20 @@ App.jsx는 Lab 컴포넌트들을 한 화면에서 보여주기 위한 틀이고
 
 ## Lab Comparison: STEP 3의 비교 분석 질문 4개에 대한 답변
 
+### 1. useEffect의 Dependency Array가 필요한 이유는?
+Effect를 언제 다시 실행할지 정하기 위해서이다. Dependency Array가 없으면 Effect가 매 렌더링마다 실행되어, Effect 안에서 State를 바꾸면 렌더링 -> Effect -> State 변경 -> 렌더링이 끝없이 반복될 수 있다.
+
+### 2. Cleanup을 사용하지 않으면 어떤 문제가 발생할 수 있는가?
+이전 Effect가 만든 타이머가 정리되지 않고 계속 남는다. 다른 Lab 탭으로 이동해 컴포넌트가 언마운트되어도 Interval이 계속 실행되어 메모리 누수가 생기고, LAB 2처럼 Effect가 다시 실행되는 경우에는 이전 타이머 위에 새 타이머가 추가되어 count가 1초에 여러 번 증가하게 된다.
+
+### 3. useState와 useRef의 가장 중요한 차이는?
+값이 바뀔 때 리렌더링이 일어나는지의 여부이다. `useState`는 값이 바뀌면 컴포넌트를 다시 렌더링하므로 화면에 보여줄 값(`count`, `running`)에 사용한다. `useRef`는 `.current`를 바꿔도 리렌더링이 일어나지 않고 렌더링 사이에 값만 유지되므로, 화면에 표시할 필요가 없는 값(Timer ID, DOM 요소)을 보관하는 데 사용한다.
+
+### 4. LAB 2와 LAB 4의 Timer 관리 방식은 어떻게 다른가?
+LAB 2는 `useEffect` + Dependency Array 방식이다. 버튼은 `running` State만 바꾸고, `running`이 바뀌면 Effect가 타이머를 만들고 Cleanup이 타이머를 정리한다. 즉, 상태 변화에 따라 타이머가 자동으로 생성·정리된다.
+
+LAB 4는 `useRef` + Event Handler 방식이다. `start`/`stop` 함수가 직접 `setInterval`/`clearInterval`을 호출하고, Timer ID는 `timerRef.current`에 보관한다. 중복 실행은 `timerRef.current`가 비어 있는지로 직접 막고, `useEffect`는 언마운트 시 남은 타이머를 정리하는 용도로만 사용한다.
+
 ## Customizing: 수정 내용 및 파일명
 
 ## Deployment: 실제 접근 가능한 Vercel URL
